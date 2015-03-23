@@ -1,0 +1,66 @@
+package generate.producer;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
+
+public class Producer implements Runnable {
+
+	private final BlockingQueue m_sharedQueue;
+	
+
+	public Producer(final BlockingQueue sharedQueue) {
+		m_sharedQueue = sharedQueue;
+	}
+
+	public static void main(final String[] args) {
+
+		final int size = 500;
+		final int numOfConsumers = 5;
+		final int numOfProducers = 1;
+		// Creating shared object
+		final BlockingQueue<?> sharedQueue = DependencyFactory
+				.getSharedQueue(size);
+		
+		System.out.println("Starting Consumer threads");
+
+		for (int i = 0; i < numOfConsumers; i++) {
+			BufferedWriter writer = null;
+			try {
+				writer = DependencyFactory.getFileWriter(i);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return;
+			}
+			
+			
+			Thread consumer = DependencyFactory.getConsumerThread(writer,
+					sharedQueue);
+			consumer.start();
+		}
+		
+		System.out.println("Starting Producer thread");
+
+		for (int i = 0; i < numOfProducers; i++) {
+			// Creating Producer and Consumer Thread
+			Thread producer = DependencyFactory.getProducerThread(sharedQueue);
+			// Starting producer and Consumer thread
+			producer.start();
+		}
+
+	}
+
+	@Override
+	public void run() {
+		System.out
+				.println("Started thread " + Thread.currentThread().getName());
+		while (true) {
+			final Message message = generateMessage();
+			m_sharedQueue.put(message);
+		}
+
+	}
+
+	
+}

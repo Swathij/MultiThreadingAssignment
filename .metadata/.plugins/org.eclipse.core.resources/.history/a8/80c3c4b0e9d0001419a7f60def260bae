@@ -1,0 +1,18 @@
+package test;
+
+public class Test {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		long now, done;
+		
+		now = System.nanoTime();
+		
+
+		done = System.nanoTime();
+		
+		System.out.printf("Time taken is %l", done - now);
+	}
+}

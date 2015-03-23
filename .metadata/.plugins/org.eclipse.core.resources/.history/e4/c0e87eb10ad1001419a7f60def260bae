@@ -1,0 +1,18 @@
+package consume.Consumer;
+
+import java.io.FileWriter;
+import java.util.concurrent.LinkedBlockingDeque;
+
+public class Consumer {
+	
+	 private final FileWriter m_writer;
+	 private final LinkedBlockingDeque m_sharedQueue;
+	 
+	 public Consumer(final FileWriter writer, final LinkedBlockingDeque sharedQueue){
+		 m_writer = writer;
+		 m_sharedQueue = sharedQueue;
+	 }
+	 
+	 
+
+}

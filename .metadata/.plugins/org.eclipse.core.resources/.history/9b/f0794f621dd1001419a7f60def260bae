@@ -1,0 +1,50 @@
+package generate.producer;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import consume.Consumer.Consumer;
+
+public class DependencyFactory {
+
+	public static BufferedWriter getFileWriter(int fileIndex) throws IOException{
+		
+		final String fileName = String.format("/MultiThreading-Question/files/file%s", fileIndex);
+		System.out.println("fileName" + fileName);
+
+		File file = new File(fileName);
+
+		// if file doesnt exists, then create it
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+
+		FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+		BufferedWriter bw = new BufferedWriter(fw);
+//		bw.write(content);
+//		bw.close();
+		
+		return bw;
+		
+	}
+	
+	public static Thread getConsumerThread(final BufferedWriter writer, final BlockingQueue<Message> sharedQueue){
+	     return new Thread(new Consumer(writer, sharedQueue));
+
+	}
+
+	public static Thread getProducerThread(final BlockingQueue sharedQueue){
+	     return new Thread(new Producer(sharedQueue));
+
+	}
+	
+	public static BlockingQueue getSharedQueue(final int capacity){
+	    return new LinkedBlockingQueue<Message>(capacity);
+
+	}
+        
+}

@@ -1,0 +1,29 @@
+package generate.producer;
+
+/*
+ * This class defines the message which is exchanged between producer and consumer.
+ */
+public class Message implements Serializable {
+
+	private final String m_id;
+    private final int m_firstNumber;
+    private final int m_secondNumber;
+    
+    public Message(final String id, final int firstNumber, final int secondNumber){
+    	m_id = id;
+    	m_firstNumber = firstNumber;
+    	m_secondNumber = secondNumber;
+    }
+    
+    public String getM_id() {
+		return m_id;
+	}
+
+	public int getFirstNumber() {
+		return m_firstNumber;
+	}
+	
+	public int getsecondNumber() {
+		return m_secondNumber;
+	}
+}

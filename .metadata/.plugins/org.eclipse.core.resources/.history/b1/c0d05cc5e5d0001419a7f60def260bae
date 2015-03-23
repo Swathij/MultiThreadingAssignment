@@ -1,0 +1,28 @@
+package generate.producer;
+
+import java.math.BigInteger;
+
+public class Message {
+
+	private final String m_id;
+    private final int m_firstNumber;
+    private final int m_secondNumber;
+    
+    public Message(final String id, final int firstNumber, final int secondNumber){
+    	m_id = id;
+    	m_firstNumber = firstNumber;
+    	m_secondNumber = secondNumber;
+    }
+    
+    public String getM_id() {
+		return m_id;
+	}
+
+	public int getFirstNumber() {
+		return m_firstNumber;
+	}
+	
+	public int getFirstNumber() {
+		return m_firstNumber;
+	}
+}

@@ -1,0 +1,12 @@
+package generate.producer;
+
+public class Message {
+    private final String m_id;
+    private final BigInteger m_number;
+    
+    public Message(final String id){
+    	m_id = id;
+    	m_number
+    }
+
+}

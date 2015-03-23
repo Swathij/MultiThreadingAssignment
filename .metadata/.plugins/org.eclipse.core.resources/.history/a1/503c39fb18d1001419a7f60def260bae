@@ -1,0 +1,25 @@
+package consume.Consumer;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+
+public class Consumer implements Runnable {
+	
+	 private final BufferedWriter m_writer;
+	 private final BlockingQueue<Messsage> m_sharedQueue;
+	 
+	 public Consumer(final BufferedWriter writer, final BlockingQueue<Message> sharedQueue){
+		 m_writer = writer;
+		 m_sharedQueue = sharedQueue;
+	 }
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	 
+
+}

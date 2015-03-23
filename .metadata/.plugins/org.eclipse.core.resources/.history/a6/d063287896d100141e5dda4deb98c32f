@@ -1,0 +1,66 @@
+package consume.Consumer;
+
+import generate.producer.Message;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
+
+public class Consumer implements Runnable {
+
+	private final BufferedWriter m_writer;
+	private final BlockingQueue<Message> m_sharedQueue;
+
+	public Consumer(final BufferedWriter writer,
+			final BlockingQueue<Message> sharedQueue) {
+		m_writer = writer;
+		m_sharedQueue = sharedQueue;
+	}
+
+	@Override
+	public void run() {
+		System.out
+				.println("Started consumer " + Thread.currentThread().getName());
+
+		while (true) {
+			try {
+				
+				final long start_time = System.nanoTime();
+				
+				final Message message = m_sharedQueue.take();
+
+				processMessage(message);
+				
+				
+				final long end_time = System.nanoTime();
+				final double difference = (end_time - start_time)/1e6;
+				System.out.println(String.format(" message processing time %lf" ,difference));
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	private void processMessage(Message message) {
+		final float operation = Math.max(message.getFirstNumber()
+				, message.getSecondNumber());
+		final String content = String.format("%s : %d ", message.get_id(),
+				operation);
+		try {
+			m_writer.write(content);
+			m_writer.newLine();
+			m_writer.flush();
+			System.out.println(String.format(" message  %s  written to file by thread %s" , message,
+					Thread.currentThread().getName()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}

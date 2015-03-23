@@ -1,0 +1,14 @@
+package generate.producer;
+
+import java.math.BigInteger;
+
+public class Message {
+    private final String m_id;
+    private final BigInteger m_randomnumber;
+    
+    public Message(final String id, final BigInteger number){
+    	m_id = id;
+    	m_number = number;
+    }
+
+}

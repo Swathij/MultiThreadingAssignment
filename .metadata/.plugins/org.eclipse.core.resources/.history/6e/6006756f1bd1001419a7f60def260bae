@@ -1,0 +1,30 @@
+package consume.Consumer;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class FileWriterFactory {
+
+	public static BufferedWriter getFileWriter(int fileIndex) throws IOException{
+		
+		final String fileName = "file" + fileIndex;
+
+		File file = new File("/src/%s", fileName);
+
+		// if file doesnt exists, then create it
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+
+		FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+		BufferedWriter bw = new BufferedWriter(fw);
+//		bw.write(content);
+//		bw.close();
+		
+		return bw;
+		
+	}
+        
+}

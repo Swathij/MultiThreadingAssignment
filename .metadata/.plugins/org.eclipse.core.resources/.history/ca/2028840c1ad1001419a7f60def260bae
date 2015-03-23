@@ -1,0 +1,36 @@
+package consume.Consumer;
+
+import generate.producer.Message;
+
+import java.io.BufferedWriter;
+import java.util.concurrent.BlockingQueue;
+
+public class Consumer implements Runnable {
+	
+	 private final BufferedWriter m_writer;
+	 private final BlockingQueue<Message> m_sharedQueue;
+	 
+	 public Consumer(final BufferedWriter writer, final BlockingQueue<Message> sharedQueue){
+		 m_writer = writer;
+		 m_sharedQueue = sharedQueue;
+	 }
+
+	@Override
+	public void run() {
+		System.out
+		.println("Started thread " + Thread.currentThread().getName());		
+		
+		while (true) {
+			final Message message = processMessage();
+			try {
+				System.out
+				.println("Added message " + message);				
+				m_sharedQueue.put(message);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	 
+
+}

@@ -1,0 +1,16 @@
+package test;
+
+public class Test {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		long now, done;
+		
+		now = System.nanoTime();
+		
+
+	}
+
+}

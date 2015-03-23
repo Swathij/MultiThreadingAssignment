@@ -1,0 +1,50 @@
+package generate.producer;
+
+
+/*
+ * This class defines the message which is exchanged between producer and consumer.
+ */
+public class Message  {
+
+	//private static final long serialVersionUID = 42L;
+
+	/**
+	 * Unique Identifier of the message.
+	 * 
+	 * @serial
+	 */
+	private final String m_id;
+	
+	/**
+	 * First random number
+	 * 
+	 * @serial
+	 */
+	private final int m_firstNumber;
+	
+	/**
+	 * Unique Identifier of the message.
+	 * 
+	 * @serial
+	 */
+	private final int m_secondNumber;
+
+	public Message(final String id, final int firstNumber,
+			final int secondNumber) {
+		m_id = id;
+		m_firstNumber = firstNumber;
+		m_secondNumber = secondNumber;
+	}
+
+	public String get_id() {
+		return m_id;
+	}
+
+	public int getFirstNumber() {
+		return m_firstNumber;
+	}
+
+	public int getSecondNumber() {
+		return m_secondNumber;
+	}
+}
