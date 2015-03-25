@@ -14,7 +14,7 @@ public class Message {
 	private final String m_id;
 
 	/*
-	 *  First random number
+	 * First random number
 	 */
 	private final int m_firstNumber;
 

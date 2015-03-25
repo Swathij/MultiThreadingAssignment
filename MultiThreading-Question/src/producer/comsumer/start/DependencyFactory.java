@@ -13,7 +13,6 @@ import data.broker.Broker;
 /*
  *  This class provides methods for creating objects needed for the application acts as
  *  a dependency injection class.
- * 
  */
 public class DependencyFactory {
 
@@ -41,18 +40,7 @@ public class DependencyFactory {
 		return bufferedWriter;
 
 	}
-
-	public static Thread getConsumerThread(final BufferedWriter writer,
-			final Broker sharedQueue) {
-		return new Thread(new Consumer(writer, sharedQueue));
-
-	}
-
-	public static Thread getProducerThread(final Broker sharedQueue, final int noOfMessages) {
-		return new Thread(new Producer(sharedQueue, noOfMessages));
-
-	}
-
+	
 	/*
 	 * This method creates consumer (@Consumer.class) Object
 	 * 

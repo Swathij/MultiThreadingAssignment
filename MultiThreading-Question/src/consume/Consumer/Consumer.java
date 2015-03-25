@@ -39,15 +39,16 @@ public class Consumer implements Runnable {
 
 		try {
 
-			while(true) {
+			while (true) {
 
 				try {
 
 					final Message message = m_sharedQueue.get();
-					// If sharedQueue has no messages(empty), .get() method
-					// would
-					// return null.
-					if (message == null){						
+					/*
+					 * If sharedQueue has no messages(empty), .get() method
+					 * would return null.
+					 */
+					if (message == null) {
 						if (m_sharedQueue.getPoisonPill())
 							break;
 						else {
@@ -55,9 +56,10 @@ public class Consumer implements Runnable {
 						}
 					}
 
-					// processMessage the maximum number between the two numbers
-					// and
-					// writes into file.
+					/*
+					 * processMessage the maximum number between the two numbers
+					 * and writes into file.
+					 */
 					processMessage(message);
 
 				} catch (InterruptedException e) {
@@ -112,12 +114,16 @@ public class Consumer implements Runnable {
 		}
 
 	}
-    /*
-     * This method finds GCD of two numbers.
-     * @Input a
-     * @Input b
-     * @returns gcd 
-     */
+
+	/*
+	 * This method finds GCD of two numbers.
+	 * 
+	 * @Input a
+	 * 
+	 * @Input b
+	 * 
+	 * @returns gcd
+	 */
 	private int GCD(int a, int b) {
 		return b == 0 ? a : GCD(b, a % b);
 	}

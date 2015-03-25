@@ -25,7 +25,6 @@ public class ProducerConsumerMain {
 	/*
 	 * This is the start point of the application. It creates the broker, consumer and producer and starts
 	 * the application.
-	 * 
 	 */
 	public static void main(final String[] args) {
 		
@@ -49,7 +48,7 @@ public class ProducerConsumerMain {
 			try {
 				writer = DependencyFactory.getFileWriter(i);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				DependencyFactory.error("creating file handler encountered exception");
 				e.printStackTrace();
 				return;
 			}
@@ -62,7 +61,6 @@ public class ProducerConsumerMain {
 		DependencyFactory.log("Starting Producer thread");
 
 		// Creating Producer thread
-
 		Future<?> producerStatus = threadPool.submit(new Producer(sharedQueue, m_noOfMessages));
 
 		try {

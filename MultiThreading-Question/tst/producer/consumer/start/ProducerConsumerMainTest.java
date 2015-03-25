@@ -13,6 +13,9 @@ import org.junit.Test;
 
 import producer.comsumer.start.ProducerConsumerMain;
 
+/*
+ * (@ProducerConsumerMainTest) defines full application tests.
+ */
 public class ProducerConsumerMainTest {
 
 	/*
@@ -168,14 +171,12 @@ public class ProducerConsumerMainTest {
 		reader.close();
 		return cnt;
 	}
-	
 
 	/*
 	 * This test is used for finding best queue size.
 	 */
 	@Test
-	public void testMain_queuesizevariton()
-			throws IOException {
+	public void testMain_queuesizevarition() throws IOException {
 
 		int noOfConsumers = 5;
 		int noOfMessages = 10000;
@@ -201,7 +202,7 @@ public class ProducerConsumerMainTest {
 		}
 
 		ProducerConsumerMain.main(args);
-		
+
 		int totalMessages = 0;
 
 		for (int i = 1; i <= noOfConsumers; i++) {

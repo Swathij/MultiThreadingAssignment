@@ -34,23 +34,26 @@ public class Producer implements Runnable {
 
 		DependencyFactory.log("Started producer "
 				+ Thread.currentThread().getName());
-		
-		// The below parameters determine if producer emits fixedNumber of messages or not.		
-		int fixedMessageCount=0;
+
+		/*
+		 * The below parameters determine if producer emits fixedNumber of
+		 * messages or not.
+		 */
+		int fixedMessageCount = 0;
 		boolean termination = false;
-        //Start time of the production.
+		// Start time of the production.
 		final long startTime = System.nanoTime();
-		
-		/* if the noOfMessages is not 0, then it producer emits m_noOfMessages number of messages
-		 * which is useful in testing and optimizing.
-		*/
-		if(m_noOfMessages != 0)
-		{
-			fixedMessageCount = (m_noOfMessages-1);
-			termination = true;			
+
+		/*
+		 * if the noOfMessages is not 0, then it producer emits m_noOfMessages
+		 * number of messages which is useful in testing and optimizing.
+		 */
+		if (m_noOfMessages != 0) {
+			fixedMessageCount = (m_noOfMessages - 1);
+			termination = true;
 		}
 		try {
-			do{
+			do {
 				final Message message = generateMessage();
 
 				try {
@@ -64,30 +67,34 @@ public class Producer implements Runnable {
 							+ " is interrupted");
 					e.printStackTrace();
 				}
-				
-				if(termination){
+
+				if (termination) {
 					fixedMessageCount--;
 				}
-			}while( fixedMessageCount >= 0);
+			} while (fixedMessageCount >= 0);
 		} finally {
 
-			if(termination){
+			if (termination) {
 				m_sharedQueue.setPoisonPill();
-				// This time includes all the time it took for producer to emit fixedNumber of messages.
+				/*
+				 * This time includes all the time it took for producer to emit
+				 * fixedNumber of messages.
+				 */
 				final long endTime = System.nanoTime();
 				final double difference = (endTime - startTime) / 1e6;
-				final double rate = m_noOfMessages/difference;
+				final double rate = m_noOfMessages / difference;
 				DependencyFactory.log(String.format(
-						" Total messages %d generation time %f rate %f", m_noOfMessages, difference, rate));
+						" Total messages %d generation time %f rate %f",
+						m_noOfMessages, difference, rate));
 			}
 		}
 	}
 
 	/*
 	 * This method generates two random numbers and UUID and constructs the
-	 * message (@Message.class). 
-	 * @returns message (@Message.class)
+	 * message (@Message.class).
 	 * 
+	 * @returns message (@Message.class)
 	 */
 	private Message generateMessage() {
 		final Random randomGenerator = new Random();
