@@ -36,6 +36,7 @@ public class Consumer implements Runnable {
 				+ Thread.currentThread().getName());
 
 		final long start_time = System.nanoTime();
+		int noOfMessages = 0;
 
 		try {
 
@@ -49,18 +50,19 @@ public class Consumer implements Runnable {
 					 * would return null.
 					 */
 					if (message == null) {
-						if (m_sharedQueue.getPoisonPill())
+						if (m_sharedQueue.getPoisonPill()){
 							break;
+						}
 						else {
 							continue;
 						}
 					}
-
 					/*
 					 * processMessage the maximum number between the two numbers
 					 * and writes into file.
 					 */
 					processMessage(message);
+					noOfMessages++;
 
 				} catch (InterruptedException e) {
 					DependencyFactory.error(Thread.currentThread().getName()
@@ -70,12 +72,21 @@ public class Consumer implements Runnable {
 			}
 
 		} finally {
+			try {
+				m_writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			final long end_time = System.nanoTime();
 
 			final double difference = (end_time - start_time) / 1e6;
+			double rate = 0;
+			if (noOfMessages > 0) {
+				rate = noOfMessages/difference;
+			}
 			DependencyFactory.log(String.format(
-					" message processing time %f for thread %s", difference,
-					Thread.currentThread().getName()));
+					" Total messages %d consumed time %f rate %f",
+					noOfMessages, difference, rate));
 		}
 
 	}
@@ -104,7 +115,7 @@ public class Consumer implements Runnable {
 			m_writer.write(content);
 			m_writer.newLine();
 			m_writer.flush();
-			DependencyFactory.log(String.format(
+			DependencyFactory.debug(String.format(
 					" message  %s  written to file by thread %s", message,
 					Thread.currentThread().getName()));
 		} catch (IOException e) {

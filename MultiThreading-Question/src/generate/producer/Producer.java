@@ -36,8 +36,8 @@ public class Producer implements Runnable {
 				+ Thread.currentThread().getName());
 
 		/*
-		 * The below parameters determine if producer emits fixedNumber of
-		 * messages or not.
+		 *  The below parameters determine if producer emits fixedNumber of
+		 *   messages or not.
 		 */
 		int fixedMessageCount = 0;
 		boolean termination = false;
@@ -59,7 +59,7 @@ public class Producer implements Runnable {
 				try {
 					// writes into broker and waits if broker is full.
 					m_sharedQueue.put(message);
-					DependencyFactory.log(String.format(
+					DependencyFactory.debug(String.format(
 							" message  %s  added by thread %s", message, Thread
 									.currentThread().getName()));
 				} catch (InterruptedException e) {

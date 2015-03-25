@@ -3,6 +3,7 @@ package producer.comsumer.start;
 import generate.producer.Producer;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +18,7 @@ import data.broker.Broker;
  */
 public class ProducerConsumerMain {
 	
-	private static int m_size = 50;
+	private static int m_size = 500;
 	private static int m_numOfConsumers = 5;
 	private static final int m_numOfProducers = 1;
 	private static int m_noOfMessages=0;
@@ -28,12 +29,13 @@ public class ProducerConsumerMain {
 	 */
 	public static void main(final String[] args) {
 		
-		DependencyFactory.log(args);
-		
-		if(args.length == 3){
-			configureParameters(args[0], args[1], args[2]);
+		// These parameters are set only when running the Junit test.
+		if(args.length == 4){
+			configureParameters(args[0], args[1], args[2], args[3]);
 		}
 
+		cleanupOldFiles();
+		
 		final Broker sharedQueue = DependencyFactory.getSharedBroker(m_size);
 		
 		// creates the executor service which handles thread failure and re creation and handles shutdown.
@@ -55,7 +57,6 @@ public class ProducerConsumerMain {
 
 			threadPool.execute(DependencyFactory.getConsumer(writer,
 					sharedQueue));
-
 		}
 
 		DependencyFactory.log("Starting Producer thread");
@@ -74,16 +75,37 @@ public class ProducerConsumerMain {
 			threadPool.shutdown(); // Disable new tasks from being submitted
 		}
 	}		
+	
+	/*
+	 * This method is used for cleaning up old files.
+	 */
+	private static void cleanupOldFiles() {
+		/*
+		 * This deletes any files which exists before.
+		 */
+		for (int i = 1; i <= m_numOfConsumers; i++) {
+
+			final String fileName = String.format("file%s.txt", i);
+
+			File file = new File("files/", fileName);
+
+			// if file exists, then delete it
+			if (file.exists()) {
+				file.delete();
+			}
+		}
+	}
 
 	/*
 	 * This method is used for testing only
 	 */
-	public static void configureParameters(final String size,
-			final String noOfConsumers, final String noOfMessages) {
+	private static void configureParameters(final String size,
+			final String noOfConsumers, final String noOfMessages, final String debugLevelLoggingEnabled) {
 
 		m_size = Integer.parseInt(size);
 		m_numOfConsumers = Integer.parseInt(noOfConsumers);
 		m_noOfMessages = Integer.parseInt(noOfMessages);
+		DependencyFactory.setConsoleLevelLoggingDisabled(Boolean.parseBoolean(debugLevelLoggingEnabled));
 	}
 
 }

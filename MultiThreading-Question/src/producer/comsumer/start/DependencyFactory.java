@@ -16,6 +16,7 @@ import data.broker.Broker;
  */
 public class DependencyFactory {
 
+	private  static Boolean m_debugLevelLoggingEnabled = true;
 	/*
 	 * This method creates a file if it doesn't exists and returns a
 	 * bufferedWriter object.
@@ -73,10 +74,20 @@ public class DependencyFactory {
 	}
 
 	/*
-	 * This method logs the info on console.
+	 * This method logs the info level on console.
 	 */
 	public static void log(Object aObject) {
 		System.out.println(String.valueOf(aObject));
+	}
+	
+	/*
+	 * This method logs the debug level on console.
+	 */
+	public static void debug(Object aObject) {
+		if(m_debugLevelLoggingEnabled){
+		    System.out.println(String.valueOf(aObject));
+		}
+
 	}
 	
 	/*
@@ -86,5 +97,11 @@ public class DependencyFactory {
 		 System.err.println(String.valueOf(aObject));
 	}
 
+	/*
+	 * This method decides if console logging is disabled or not.
+	 */
+	public static void setConsoleLevelLoggingDisabled(Boolean debugLevelLoggingEnabled) {
+		m_debugLevelLoggingEnabled = debugLevelLoggingEnabled;
+	}
 	
 }

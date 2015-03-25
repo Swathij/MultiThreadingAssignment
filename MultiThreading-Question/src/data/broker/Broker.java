@@ -41,7 +41,7 @@ public class Broker {
 	 * @throws (@InterruptedException.Class when the thread is interrrupted)
 	 */
 	public Message get() throws InterruptedException {
-		return this.m_queue.poll(10, TimeUnit.MILLISECONDS);
+		return this.m_queue.poll(1, TimeUnit.MILLISECONDS);
 	}
 
 	/*

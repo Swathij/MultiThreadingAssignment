@@ -28,10 +28,13 @@ public class ProducerConsumerMainTest {
 
 		int noOfConsumers = 5;
 		int noOfMessages = 100;
-		String[] args = new String[3];
+		boolean debugLevelLoggingEnabled = true;
+		String[] args = new String[4];
 		args[0] = "50"; // size
 		args[1] = String.valueOf(noOfConsumers); // NoOfConsumers
 		args[2] = String.valueOf(noOfMessages); // NoOfMessages
+		args[3] = String.valueOf(debugLevelLoggingEnabled); // to decide logging
+															// level
 
 		/*
 		 * This deletes any files which exists before.
@@ -72,12 +75,14 @@ public class ProducerConsumerMainTest {
 
 		int noOfConsumers = 5;
 		int noOfMessages = 10;
-		String[] args = new String[3];
+		boolean debugLevelLoggingEnabled = true;
+		String[] args = new String[4];
 
 		args[0] = "50"; // size
 		args[1] = String.valueOf(noOfConsumers); // NoOfConsumers
 		args[2] = String.valueOf(noOfMessages); // NoOfMessages
-
+		args[3] = String.valueOf(debugLevelLoggingEnabled); // to decide logging
+															// level
 		/*
 		 * This deletes any files which exists before.
 		 */
@@ -180,10 +185,14 @@ public class ProducerConsumerMainTest {
 
 		int noOfConsumers = 5;
 		int noOfMessages = 10000;
-		String[] args = new String[3];
-		args[0] = "50"; // size
+		boolean debugLevelLoggingEnabled = false;
+
+		String[] args = new String[4];
+		args[0] = "10000"; // size
 		args[1] = String.valueOf(noOfConsumers); // NoOfConsumers
 		args[2] = String.valueOf(noOfMessages); // NoOfMessages
+		args[3] = String.valueOf(debugLevelLoggingEnabled); // to decide logging
+															// level
 
 		/*
 		 * This deletes any files which exists before.
