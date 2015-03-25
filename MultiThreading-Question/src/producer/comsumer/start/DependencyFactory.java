@@ -48,8 +48,8 @@ public class DependencyFactory {
 
 	}
 
-	public static Thread getProducerThread(final Broker sharedQueue) {
-		return new Thread(new Producer(sharedQueue));
+	public static Thread getProducerThread(final Broker sharedQueue, final int noOfMessages) {
+		return new Thread(new Producer(sharedQueue, noOfMessages));
 
 	}
 
@@ -69,8 +69,8 @@ public class DependencyFactory {
 	 * 
 	 * @returns (@Producer.class)
 	 */
-	public static Producer getProducer(final Broker sharedQueue) {
-		return new Producer(sharedQueue);
+	public static Producer getProducer(final Broker sharedQueue, final int noOfMessages) {
+		return new Producer(sharedQueue, noOfMessages);
 
 	}
 

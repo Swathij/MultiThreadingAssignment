@@ -16,15 +16,15 @@ public class Message {
 	/*
 	 *  First random number
 	 */
-	private final float m_firstNumber;
+	private final int m_firstNumber;
 
 	/*
 	 * Second random number
 	 */
-	private final float m_secondNumber;
+	private final int m_secondNumber;
 
-	public Message(final String id, final float firstNumber,
-			final float secondNumber) {
+	public Message(final String id, final int firstNumber,
+			final int secondNumber) {
 		m_id = id;
 		m_firstNumber = firstNumber;
 		m_secondNumber = secondNumber;
@@ -34,11 +34,11 @@ public class Message {
 		return m_id;
 	}
 
-	public float getFirstNumber() {
+	public int getFirstNumber() {
 		return m_firstNumber;
 	}
 
-	public float getSecondNumber() {
+	public int getSecondNumber() {
 		return m_secondNumber;
 	}
 

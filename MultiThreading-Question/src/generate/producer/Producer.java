@@ -16,9 +16,11 @@ import data.broker.Message;
 public class Producer implements Runnable {
 
 	private final Broker m_sharedQueue;
+	private final int m_noOfMessages;
 
-	public Producer(final Broker sharedQueue) {
+	public Producer(final Broker sharedQueue, final int noOfMessages) {
 		m_sharedQueue = sharedQueue;
+		m_noOfMessages = noOfMessages;
 	}
 
 	/*
@@ -32,39 +34,65 @@ public class Producer implements Runnable {
 
 		DependencyFactory.log("Started producer "
 				+ Thread.currentThread().getName());
+		
+		// The below parameters determine if producer emits fixedNumber of messages or not.		
+		int fixedMessageCount=0;
+		boolean termination = false;
+        //Start time of the production.
+		final long startTime = System.nanoTime();
+		
+		/* if the noOfMessages is not 0, then it producer emits m_noOfMessages number of messages
+		 * which is useful in testing and optimizing.
+		*/
+		if(m_noOfMessages != 0)
+		{
+			fixedMessageCount = (m_noOfMessages-1);
+			termination = true;			
+		}
+		try {
+			do{
+				final Message message = generateMessage();
 
-		while (true) {
-			final long startTime = System.nanoTime();
-			final Message message = generateMessage();
+				try {
+					// writes into broker and waits if broker is full.
+					m_sharedQueue.put(message);
+					DependencyFactory.log(String.format(
+							" message  %s  added by thread %s", message, Thread
+									.currentThread().getName()));
+				} catch (InterruptedException e) {
+					DependencyFactory.error(Thread.currentThread().getName()
+							+ " is interrupted");
+					e.printStackTrace();
+				}
+				
+				if(termination){
+					fixedMessageCount--;
+				}
+			}while( fixedMessageCount >= 0);
+		} finally {
 
-			try {
-				// writes into broker and waits if broker is full.
-				m_sharedQueue.put(message);
+			if(termination){
+				m_sharedQueue.setPoisonPill();
+				// This time includes all the time it took for producer to emit fixedNumber of messages.
+				final long endTime = System.nanoTime();
+				final double difference = (endTime - startTime) / 1e6;
+				final double rate = m_noOfMessages/difference;
 				DependencyFactory.log(String.format(
-						" message  %s  added by thread %s", message, Thread
-								.currentThread().getName()));
-			} catch (InterruptedException e) {
-				DependencyFactory.error(Thread.currentThread().getName()+ " is interrupted");
-				e.printStackTrace();
+						" Total messages %d generation time %f rate %f", m_noOfMessages, difference, rate));
 			}
-
-			final long endTime = System.nanoTime();
-			final double difference = (endTime - startTime) / 1e6;
-			DependencyFactory.log(String.format(" message generation time %f",
-					difference));
 		}
 	}
 
 	/*
-	 * This method generates two random numbers and UUID and constructors the
+	 * This method generates two random numbers and UUID and constructs the
 	 * message (@Message.class). 
 	 * @returns message (@Message.class)
 	 * 
 	 */
 	private Message generateMessage() {
 		final Random randomGenerator = new Random();
-		final float firstRandom = randomGenerator.nextInt(1000);
-		final float secondRandom = randomGenerator.nextInt(2000);
+		final int firstRandom = randomGenerator.nextInt(1000);
+		final int secondRandom = randomGenerator.nextInt(2000);
 
 		final UUID idOne = UUID.randomUUID();
 

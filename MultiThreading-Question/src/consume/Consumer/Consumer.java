@@ -35,52 +35,69 @@ public class Consumer implements Runnable {
 		DependencyFactory.log("Started consumer "
 				+ Thread.currentThread().getName());
 
-		while (true) {
+		final long start_time = System.nanoTime();
 
-			try {
+		try {
 
-				final Message message = m_sharedQueue.get();
-				// If sharedQueue has no messages(empty), .get() method would
-				// return null.
-				if (message == null)
-					continue;
+			while(true) {
 
-				final long start_time = System.nanoTime();
-				// processMessage the maximum number between the two numbers and
-				// writes into file.
-				processMessage(message);
+				try {
 
-				final long end_time = System.nanoTime();
+					final Message message = m_sharedQueue.get();
+					// If sharedQueue has no messages(empty), .get() method
+					// would
+					// return null.
+					if (message == null){						
+						if (m_sharedQueue.getPoisonPill())
+							break;
+						else {
+							continue;
+						}
+					}
 
-				final double difference = (end_time - start_time) / 1e6;
-				DependencyFactory.log(String.format(
-						" message processing time %f for thread %s",
-						difference, Thread.currentThread().getName()));
+					// processMessage the maximum number between the two numbers
+					// and
+					// writes into file.
+					processMessage(message);
 
-			} catch (InterruptedException e) {
-				DependencyFactory.error(Thread.currentThread().getName()
-						+ " is interrupted");
-				e.printStackTrace();
+				} catch (InterruptedException e) {
+					DependencyFactory.error(Thread.currentThread().getName()
+							+ " is interrupted");
+					e.printStackTrace();
+				}
 			}
 
+		} finally {
+			final long end_time = System.nanoTime();
+
+			final double difference = (end_time - start_time) / 1e6;
+			DependencyFactory.log(String.format(
+					" message processing time %f for thread %s", difference,
+					Thread.currentThread().getName()));
 		}
 
 	}
 
 	/*
 	 * This method has logic for processing the message which finding maximum of
-	 * two numbers sent in the message and printing teh numbers in the
+	 * two numbers sent in the message and printing the numbers in the
 	 * respective file.
 	 * 
-	 * @Input message (@Message.Class data which is exchnaged between consumer
+	 * @Input message (@Message.Class data which is exchanged between consumer
 	 * and producer)
 	 */
 	private void processMessage(Message message) {
 
-		final float operation = Math.max(message.getFirstNumber(),
+		// final int operation = Math.max(message.getFirstNumber(),
+		// message.getSecondNumber());
+
+		final int operation = GCD(message.getFirstNumber(),
 				message.getSecondNumber());
-		final String content = String.format("%s : Max (%f & %f) : %f ", message.get_id(),
-				message.getFirstNumber(), message.getSecondNumber(), operation);
+
+		final String content = String.format("%s : GCD (%d : %d) : %d ",
+				message.get_id(), message.getFirstNumber(),
+				message.getSecondNumber(), operation);
+
 		try {
 			m_writer.write(content);
 			m_writer.newLine();
@@ -94,6 +111,15 @@ public class Consumer implements Runnable {
 			e.printStackTrace();
 		}
 
+	}
+    /*
+     * This method finds GCD of two numbers.
+     * @Input a
+     * @Input b
+     * @returns gcd 
+     */
+	private int GCD(int a, int b) {
+		return b == 0 ? a : GCD(b, a % b);
 	}
 
 }

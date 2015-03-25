@@ -11,7 +11,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class Broker {
 	private BlockingQueue<Message> m_queue;
-
+    private volatile boolean m_poisonPill = false;
+    
 	public Broker(final int capacity) {
 		m_queue = new LinkedBlockingQueue<Message>(capacity);
 	}
@@ -40,7 +41,24 @@ public class Broker {
 	 * @throws (@InterruptedException.Class when the thread is interrrupted)
 	 */
 	public Message get() throws InterruptedException {
-		return this.m_queue.poll(1, TimeUnit.SECONDS);
+		return this.m_queue.poll(10, TimeUnit.MILLISECONDS);
+	}
+	
+	/*
+	 * For instance which has a termination condition of fixedMessages, m_continueEnqueing
+	 * is set by producer to indicate the termination of message Enqueue. 
+	 * 
+	 */	
+	public void setPoisonPill(){
+		m_poisonPill = true;
+	}
+	
+	/*
+	 * Consumer uses m_continueEnqueing to determine if producer is still emitting any messages.
+	 */	
+	public boolean getPoisonPill(){
+		
+		return m_poisonPill;
 	}
 
 }
